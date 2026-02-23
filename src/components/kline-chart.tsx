@@ -43,6 +43,7 @@ interface KLineChartProps {
     title?: string;
   }>;
   height?: number;
+  barSpacing?: number;
 }
 
 export function KLineChart({
@@ -51,6 +52,7 @@ export function KLineChart({
   markers,
   lines,
   height = 400,
+  barSpacing,
 }: KLineChartProps) {
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
@@ -147,6 +149,19 @@ export function KLineChart({
 
     chart.timeScale().fitContent();
 
+    // When few data points, auto-limit bar width and center them
+    const effectiveBarSpacing = barSpacing ?? (data.length <= 30 ? 20 : undefined);
+    if (effectiveBarSpacing && chartContainerRef.current) {
+      const chartWidth = chartContainerRef.current.clientWidth;
+      const totalBarsWidth = data.length * effectiveBarSpacing;
+      const emptySpace = chartWidth - totalBarsWidth;
+      const rightOffsetBars = emptySpace > 0 ? emptySpace / (2 * effectiveBarSpacing) : 0;
+      chart.timeScale().applyOptions({
+        barSpacing: effectiveBarSpacing,
+        rightOffset: rightOffsetBars,
+      });
+    }
+
     const handleResize = () => {
       if (chartContainerRef.current) {
         chart.applyOptions({ width: chartContainerRef.current.clientWidth });
@@ -160,7 +175,7 @@ export function KLineChart({
       window.removeEventListener("resize", handleResize);
       chart.remove();
     };
-  }, [data, volume, markers, lines, height, theme]);
+  }, [data, volume, markers, lines, height, theme, barSpacing]);
 
   return (
     <div
