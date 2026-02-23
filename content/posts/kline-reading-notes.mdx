@@ -44,8 +44,8 @@ excerpt: "建仓方向一致原则、反转K线判断标准、内包与外包K�
   ]}
   markers={[
     { time: "2026-03-06", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "突破讯号K线" },
-    { time: "2026-03-07", position: "belowBar", color: "#3b82f6", shape: "arrowUp", text: "入场K线（趋势阳线）" },
-    { time: "2026-03-08", position: "belowBar", color: "#a855f7", shape: "arrowUp", text: "跟进K线（继续收阳）" }
+    { time: "2026-03-07", position: "aboveBar", color: "#3b82f6", shape: "arrowDown", text: "入场K线" },
+    { time: "2026-03-08", position: "belowBar", color: "#a855f7", shape: "arrowUp", text: "跟进K线" }
   ]}
   lines={[
     { price: 105, color: "#ef4444", title: "阻力位 105" }
@@ -71,8 +71,8 @@ excerpt: "建仓方向一致原则、反转K线判断标准、内包与外包K�
   ]}
   markers={[
     { time: "2026-03-14", position: "aboveBar", color: "#ef4444", shape: "arrowDown", text: "回调开始" },
-    { time: "2026-03-17", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "讯号K线（回调结束）" },
-    { time: "2026-03-18", position: "belowBar", color: "#3b82f6", shape: "arrowUp", text: "入场K线" },
+    { time: "2026-03-17", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "讯号K线" },
+    { time: "2026-03-18", position: "aboveBar", color: "#3b82f6", shape: "arrowDown", text: "入场K线" },
     { time: "2026-03-19", position: "belowBar", color: "#a855f7", shape: "arrowUp", text: "跟进K线" }
   ]}
   lines={[
@@ -110,9 +110,9 @@ excerpt: "建仓方向一致原则、反转K线判断标准、内包与外包K�
     { time: "2026-02-12", open: 105, high: 107, low: 104.5, close: 106.5 },
   ]}
   markers={[
-    { time: "2026-02-10", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "讯号K线（长下影阳线）" },
-    { time: "2026-02-11", position: "belowBar", color: "#3b82f6", shape: "arrowUp", text: "入场K线（趋势阳线）" },
-    { time: "2026-02-12", position: "belowBar", color: "#a855f7", shape: "arrowUp", text: "跟进K线（继续收阳）" }
+    { time: "2026-02-10", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "讯号K线" },
+    { time: "2026-02-11", position: "aboveBar", color: "#3b82f6", shape: "arrowDown", text: "入场K线" },
+    { time: "2026-02-12", position: "belowBar", color: "#a855f7", shape: "arrowUp", text: "跟进K线" }
   ]}
   lines={[
     { price: 100, color: "#ef4444", title: "支撑位 100元" }
@@ -148,9 +148,9 @@ excerpt: "建仓方向一致原则、反转K线判断标准、内包与外包K�
     { time: "2026-03-24", open: 100, high: 107, low: 93, close: 101 }
   ]}
   markers={[
-    { time: "2026-03-20", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "趋势K线：实体大、影线短" },
-    { time: "2026-03-22", position: "belowBar", color: "#3b82f6", shape: "arrowUp", text: "反转K线：长下影、收在上半" },
-    { time: "2026-03-24", position: "belowBar", color: "#f97316", shape: "arrowUp", text: "区间K线：上下影线长、实体小" }
+    { time: "2026-03-20", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "趋势K线" },
+    { time: "2026-03-22", position: "aboveBar", color: "#3b82f6", shape: "arrowDown", text: "反转K线" },
+    { time: "2026-03-24", position: "belowBar", color: "#f97316", shape: "arrowUp", text: "区间K线" }
   ]}
   height={300}
 />
@@ -181,9 +181,9 @@ excerpt: "建仓方向一致原则、反转K线判断标准、内包与外包K�
     { time: "2026-01-05", open: 93, high: 110, low: 90, close: 108 }
   ]}
   markers={[
-    { time: "2026-01-01", position: "belowBar", color: "#eab308", shape: "arrowUp", text: "A级：收盘101，刚过中点" },
-    { time: "2026-01-03", position: "belowBar", color: "#3b82f6", shape: "arrowUp", text: "B级：收盘105，明显高于中点" },
-    { time: "2026-01-05", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "C级：收盘108，接近最高价" }
+    { time: "2026-01-01", position: "belowBar", color: "#eab308", shape: "arrowUp", text: "A级：收盘101" },
+    { time: "2026-01-03", position: "aboveBar", color: "#3b82f6", shape: "arrowDown", text: "B级：收盘105" },
+    { time: "2026-01-05", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "C级：收盘108" }
   ]}
   lines={[
     { price: 100, color: "#f97316", title: "中点 (H+L)/2 = 100" },
@@ -203,9 +203,9 @@ excerpt: "建仓方向一致原则、反转K线判断标准、内包与外包K�
     { time: "2026-01-11", open: 107, high: 110, low: 90, close: 92 }
   ]}
   markers={[
-    { time: "2026-01-07", position: "aboveBar", color: "#eab308", shape: "arrowDown", text: "A级：收盘99，刚过中点" },
-    { time: "2026-01-09", position: "aboveBar", color: "#3b82f6", shape: "arrowDown", text: "B级：收盘95，明显低于中点" },
-    { time: "2026-01-11", position: "aboveBar", color: "#ef4444", shape: "arrowDown", text: "C级：收盘92，接近最低价" }
+    { time: "2026-01-07", position: "aboveBar", color: "#eab308", shape: "arrowDown", text: "A级：收盘99" },
+    { time: "2026-01-09", position: "belowBar", color: "#3b82f6", shape: "arrowUp", text: "B级：收盘95" },
+    { time: "2026-01-11", position: "aboveBar", color: "#ef4444", shape: "arrowDown", text: "C级：收盘92" }
   ]}
   lines={[
     { price: 100, color: "#f97316", title: "中点 (H+L)/2 = 100" },
@@ -269,8 +269,8 @@ excerpt: "建仓方向一致原则、反转K线判断标准、内包与外包K�
     { time: "2026-02-22", open: 99.5, high: 103, low: 99, close: 102.5 }
   ]}
   markers={[
-    { time: "2026-02-19", position: "belowBar", color: "#eab308", shape: "arrowUp", text: "第1根：阴线但长下影（空头力竭）" },
-    { time: "2026-02-20", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "第2根：阳线反超（反转完成）" },
+    { time: "2026-02-19", position: "belowBar", color: "#eab308", shape: "arrowUp", text: "第1根：空头力竭" },
+    { time: "2026-02-20", position: "aboveBar", color: "#22c55e", shape: "arrowDown", text: "第2根：反转完成" },
     { time: "2026-02-21", position: "belowBar", color: "#3b82f6", shape: "arrowUp", text: "入场K线" }
   ]}
   lines={[
@@ -293,10 +293,10 @@ excerpt: "建仓方向一致原则、反转K线判断标准、内包与外包K�
     { time: "2026-03-04", open: 103.5, high: 104, low: 100, close: 100.5 }
   ]}
   markers={[
-    { time: "2026-03-01", position: "aboveBar", color: "#eab308", shape: "arrowDown", text: "第1根：长上影线（多头受阻）" },
-    { time: "2026-03-02", position: "aboveBar", color: "#f97316", shape: "arrowDown", text: "第2根：阴线（空头施压）" },
-    { time: "2026-03-03", position: "aboveBar", color: "#ef4444", shape: "arrowDown", text: "第3根：趋势阴线（反转完成）" },
-    { time: "2026-03-04", position: "aboveBar", color: "#3b82f6", shape: "arrowDown", text: "入场做空" }
+    { time: "2026-03-01", position: "aboveBar", color: "#eab308", shape: "arrowDown", text: "第1根：多头受阻" },
+    { time: "2026-03-02", position: "belowBar", color: "#f97316", shape: "arrowUp", text: "第2根：空头施压" },
+    { time: "2026-03-03", position: "aboveBar", color: "#ef4444", shape: "arrowDown", text: "第3根：反转完成" },
+    { time: "2026-03-04", position: "belowBar", color: "#3b82f6", shape: "arrowUp", text: "入场做空" }
   ]}
 />
 
@@ -352,8 +352,8 @@ excerpt: "建仓方向一致原则、反转K线判断标准、内包与外包K�
   ]}
   markers={[
     { time: "2026-04-01", position: "aboveBar", color: "#3b82f6", text: "第1根（最大）" },
-    { time: "2026-04-02", position: "belowBar", color: "#3b82f6", text: "i：被第1根包住" },
-    { time: "2026-04-03", position: "belowBar", color: "#a855f7", text: "ii：被第2根包住" }
+    { time: "2026-04-02", position: "belowBar", color: "#3b82f6", text: "i：内包" },
+    { time: "2026-04-03", position: "aboveBar", color: "#a855f7", text: "ii：再内包" }
   ]}
   height={300}
 />
@@ -403,11 +403,11 @@ excerpt: "建仓方向一致原则、反转K线判断标准、内包与外包K�
   ]}
   markers={[
     { time: "2026-04-12", position: "belowBar", color: "#ef4444", shape: "arrowUp", text: "第一次触底" },
-    { time: "2026-04-18", position: "belowBar", color: "#22c55e", text: "i：内包" },
-    { time: "2026-04-19", position: "belowBar", color: "#f97316", text: "O：外包" },
-    { time: "2026-04-20", position: "belowBar", color: "#a855f7", text: "i：内包" },
-    { time: "2026-04-17", position: "belowBar", color: "#ef4444", shape: "arrowUp", text: "第二次触底" },
-    { time: "2026-04-21", position: "belowBar", color: "#3b82f6", shape: "arrowUp", text: "入场K线（突破纠结区）" }
+    { time: "2026-04-17", position: "aboveBar", color: "#ef4444", shape: "arrowDown", text: "第二次触底" },
+    { time: "2026-04-18", position: "belowBar", color: "#22c55e", text: "i" },
+    { time: "2026-04-19", position: "aboveBar", color: "#f97316", text: "O" },
+    { time: "2026-04-20", position: "belowBar", color: "#a855f7", text: "i" },
+    { time: "2026-04-21", position: "aboveBar", color: "#3b82f6", shape: "arrowDown", text: "入场K线" }
   ]}
   lines={[
     { price: 90, color: "#ef4444", title: "支撑位 90" }
