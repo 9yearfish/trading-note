@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { KLineChart } from "./kline-chart";
+import confetti from "canvas-confetti";
 
 interface ChartData {
   data: Array<{ time: string; open: number; high: number; low: number; close: number }>;
@@ -19,17 +20,46 @@ interface QuizQuestion {
   chart?: ChartData;
 }
 
+function fireConfetti() {
+  const duration = 2000;
+  const end = Date.now() + duration;
+
+  const frame = () => {
+    confetti({
+      particleCount: 3,
+      angle: 60,
+      spread: 55,
+      origin: { x: 0, y: 0.7 },
+      colors: ["#22c55e", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6"],
+    });
+    confetti({
+      particleCount: 3,
+      angle: 120,
+      spread: 55,
+      origin: { x: 1, y: 0.7 },
+      colors: ["#22c55e", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6"],
+    });
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  };
+  frame();
+}
+
 export function AIQuiz({ slug }: { slug: string }) {
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [answers, setAnswers] = useState<Record<number, number>>({});
+  const confettiFired = useRef(false);
 
   const generate = useCallback(async () => {
     setLoading(true);
     setError(null);
     setQuestions([]);
     setAnswers({});
+    confettiFired.current = false;
     try {
       const res = await fetch(`/api/quiz?slug=${encodeURIComponent(slug)}`);
       const data = await res.json();
@@ -56,6 +86,23 @@ export function AIQuiz({ slug }: { slug: string }) {
 
   const answeredCount = Object.keys(answers).length;
   const correctCount = questions.filter((q, i) => answers[i] === q.answer).length;
+  const allAnswered = questions.length > 0 && answeredCount === questions.length;
+
+  // Fire confetti when all questions answered
+  useEffect(() => {
+    if (allAnswered && !confettiFired.current) {
+      confettiFired.current = true;
+      fireConfetti();
+    }
+  }, [allAnswered]);
+
+  const scoreColor = allAnswered
+    ? correctCount === questions.length
+      ? "text-green-600 dark:text-green-400"
+      : correctCount >= questions.length * 0.7
+        ? "text-blue-600 dark:text-blue-400"
+        : "text-orange-600 dark:text-orange-400"
+    : "";
 
   return (
     <section className="mt-12 border-t pt-8">
@@ -162,9 +209,9 @@ export function AIQuiz({ slug }: { slug: string }) {
             </div>
           ))}
 
-          {answeredCount === questions.length && (
+          {allAnswered && (
             <div className="p-4 rounded-lg bg-muted text-center">
-              <p className="text-lg font-medium">
+              <p className={`text-lg font-bold ${scoreColor}`}>
                 得分：{correctCount} / {questions.length}
               </p>
               <p className="text-sm text-muted-foreground mt-1">

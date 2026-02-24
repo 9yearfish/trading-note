@@ -49,7 +49,12 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <Navbar />
-          <main className="container mx-auto px-4 py-8">{children}</main>
+          <main className="container mx-auto px-4 py-8 min-h-[calc(100vh-8rem)]">{children}</main>
+          <footer className="border-t py-6 text-center text-sm text-muted-foreground">
+            <div className="container mx-auto px-4">
+              &copy; {new Date().getFullYear()} {siteConfig.author} &middot; {siteConfig.name}
+            </div>
+          </footer>
         </ThemeProvider>
       </body>
     </html>

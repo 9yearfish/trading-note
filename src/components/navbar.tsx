@@ -10,8 +10,8 @@ export function Navbar() {
           <Link href="/" className="font-bold text-lg">
             {siteConfig.name}
           </Link>
-          <span className="text-muted-foreground/30 hidden sm:inline">|</span>
-          <span className="text-sm text-muted-foreground hidden sm:inline">
+          <span className="text-muted-foreground/30">|</span>
+          <span className="text-xs sm:text-sm text-muted-foreground">
             {siteConfig.slogan}
           </span>
         </div>

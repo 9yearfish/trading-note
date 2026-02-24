@@ -15,7 +15,7 @@ export default async function Home() {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div className={`grid gap-6 max-w-4xl mx-auto ${sortedPosts.length <= 2 ? "grid-cols-1 max-w-xl" : "grid-cols-1 md:grid-cols-2"}`}>
           {sortedPosts.map((post) => (
             <PostCard
               key={post.slug}
