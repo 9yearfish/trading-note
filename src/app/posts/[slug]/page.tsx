@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { MDXContent } from "@/components/mdx-content";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
+import { AIQuiz } from "@/components/ai-quiz";
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
@@ -69,6 +70,7 @@ export default async function PostPage({ params }: PostPageProps) {
       <div className="prose prose-neutral dark:prose-invert max-w-none">
         <MDXContent code={post.content} />
       </div>
+      <AIQuiz slug={slug} />
     </article>
   );
 }
