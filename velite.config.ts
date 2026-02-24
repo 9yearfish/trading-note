@@ -25,7 +25,7 @@ export default defineConfig({
     assets: "public/static",
     base: "/static/",
     name: "[name]-[hash:6].[ext]",
-    clean: true,
+    clean: false,
   },
   collections: { posts },
   mdx: {

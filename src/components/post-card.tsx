@@ -11,7 +11,7 @@ interface PostCardProps {
 export function PostCard({ title, slug, date, excerpt }: PostCardProps) {
   return (
     <Link href={`/posts/${slug}`}>
-      <Card className="h-full hover:border-foreground/20 transition-colors cursor-pointer">
+      <Card className="h-full transition-all duration-200 cursor-pointer hover:border-foreground/20 hover:shadow-md hover:-translate-y-0.5">
         <CardHeader className="pb-3">
           <span className="text-xs text-muted-foreground">
             {new Date(date).toLocaleDateString("zh-CN")}
@@ -20,7 +20,9 @@ export function PostCard({ title, slug, date, excerpt }: PostCardProps) {
         </CardHeader>
         {excerpt && (
           <CardContent>
-            <p className="text-sm text-muted-foreground">{excerpt}</p>
+            <p className="text-sm text-muted-foreground line-clamp-2">
+              {excerpt}
+            </p>
           </CardContent>
         )}
       </Card>
