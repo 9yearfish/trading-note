@@ -37,18 +37,20 @@ export default async function PostPage({ params }: PostPageProps) {
         &larr; Back
       </Link>
       <header className="mb-8">
-        <div className="flex items-center gap-2 mb-3">
-          <Badge variant="outline">{post.category}</Badge>
-          <span className="text-sm text-muted-foreground">
-            {new Date(post.date).toLocaleDateString("zh-CN")}
-          </span>
-        </div>
-        <h1 className="text-3xl font-bold mb-3">{post.title}</h1>
+        <span className="text-sm text-muted-foreground">
+          {new Date(post.date).toLocaleDateString("zh-CN")}
+        </span>
+        <h1 className="text-3xl font-bold mt-2 mb-3">{post.title}</h1>
         <div className="flex flex-wrap gap-1">
           {post.tags.map((tag) => (
-            <Badge key={tag} variant="secondary" className="text-xs">
-              {tag}
-            </Badge>
+            <Link key={tag} href={`/?tag=${encodeURIComponent(tag)}`}>
+              <Badge
+                variant="secondary"
+                className="text-xs cursor-pointer hover:bg-secondary/80"
+              >
+                {tag}
+              </Badge>
+            </Link>
           ))}
         </div>
       </header>

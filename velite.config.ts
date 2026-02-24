@@ -8,7 +8,6 @@ const posts = defineCollection({
       title: s.string().max(99),
       date: s.isodate(),
       tags: s.array(s.string()).default([]),
-      category: s.enum(["strategy", "analysis", "journal"]).default("journal"),
       excerpt: s.string().max(200).optional(),
       path: s.path(),
       content: s.mdx(),

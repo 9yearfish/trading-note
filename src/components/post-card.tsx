@@ -1,44 +1,39 @@
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 interface PostCardProps {
   title: string;
   slug: string;
   date: string;
-  category: string;
   tags: string[];
-  excerpt?: string;
 }
 
-export function PostCard({ title, slug, date, category, tags, excerpt }: PostCardProps) {
+export function PostCard({ title, slug, date, tags }: PostCardProps) {
   return (
-    <Link href={`/posts/${slug}`}>
-      <Card className="h-full hover:border-foreground/20 transition-colors cursor-pointer">
-        <CardHeader className="pb-3">
-          <div className="flex items-center gap-2 mb-2">
-            <Badge variant="outline" className="text-xs">
-              {category}
-            </Badge>
-            <span className="text-xs text-muted-foreground">
-              {new Date(date).toLocaleDateString("zh-CN")}
-            </span>
-          </div>
-          <CardTitle className="text-lg leading-tight">{title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {excerpt && (
-            <p className="text-sm text-muted-foreground mb-3">{excerpt}</p>
-          )}
-          <div className="flex flex-wrap gap-1">
-            {tags.map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-xs">
+    <div className="flex items-baseline justify-between gap-4 py-3 border-b last:border-b-0">
+      <div className="flex items-baseline gap-3 min-w-0">
+        <Link
+          href={`/posts/${slug}`}
+          className="font-medium hover:underline truncate shrink-0"
+        >
+          {title}
+        </Link>
+        <div className="flex flex-wrap gap-1 shrink-0">
+          {tags.map((tag) => (
+            <Link key={tag} href={`/?tag=${encodeURIComponent(tag)}`}>
+              <Badge
+                variant="secondary"
+                className="text-xs cursor-pointer hover:bg-secondary/80"
+              >
                 {tag}
               </Badge>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    </Link>
+            </Link>
+          ))}
+        </div>
+      </div>
+      <span className="text-sm text-muted-foreground whitespace-nowrap shrink-0">
+        {new Date(date).toLocaleDateString("zh-CN")}
+      </span>
+    </div>
   );
 }
