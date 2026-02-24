@@ -105,7 +105,7 @@ export function AIQuiz({ slug }: { slug: string }) {
     : "";
 
   return (
-    <section className="mt-12 border-t pt-8">
+    <section className="mt-16 pt-10 border-t-2 border-dashed">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold">课后测验</h2>
         {questions.length > 0 && (

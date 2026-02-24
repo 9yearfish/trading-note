@@ -53,19 +53,21 @@ export default async function PostPage({ params }: PostPageProps) {
         返回
       </Link>
       <header className="mb-10">
-        <span className="text-sm text-muted-foreground">
-          {new Date(post.date).toLocaleDateString("zh-CN")}
-        </span>
-        <h1 className="text-3xl sm:text-4xl font-bold mt-3 mb-4 leading-tight">{post.title}</h1>
-        {post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {post.tags.map((tag) => (
-              <Badge key={tag} variant="secondary" className="text-xs">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        )}
+        <h1 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight">{post.title}</h1>
+        <div className="flex items-center gap-3 flex-wrap">
+          <span className="text-sm text-muted-foreground">
+            {new Date(post.date).toLocaleDateString("zh-CN")}
+          </span>
+          {post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {post.tags.map((tag) => (
+                <Badge key={tag} variant="secondary" className="text-xs">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          )}
+        </div>
       </header>
       <div className="prose prose-neutral dark:prose-invert max-w-none">
         <MDXContent code={post.content} />

@@ -26,6 +26,62 @@ function getArticleContent(slug: string): string | null {
   }
 }
 
+// Robust JSON extraction from AI text — handles truncated responses
+function extractJSON(text: string): unknown[] | null {
+  // Step 1: strip markdown code fences
+  let str = text.replace(/^```json?\s*\n?/m, "").replace(/\n?\s*```\s*$/m, "").trim();
+
+  // Step 2: fix common issues
+  str = str
+    .replace(/\u201c/g, '"').replace(/\u201d/g, '"')
+    .replace(/\u2018/g, "'").replace(/\u2019/g, "'");
+
+  // Step 3: try full array parse first
+  const start = str.indexOf("[");
+  if (start === -1) return null;
+  let depth = 0;
+  let end = -1;
+  for (let i = start; i < str.length; i++) {
+    if (str[i] === "[") depth++;
+    else if (str[i] === "]") { depth--; if (depth === 0) { end = i; break; } }
+  }
+
+  if (end !== -1) {
+    const full = str.slice(start, end + 1).replace(/,\s*([}\]])/g, "$1");
+    try { return JSON.parse(full); } catch { /* fall through to partial */ }
+  }
+
+  // Step 4: response was likely truncated — salvage complete objects
+  console.warn("JSON truncated, attempting partial recovery...");
+  const items: unknown[] = [];
+  // Find each top-level object boundary in the array
+  let objStart = -1;
+  let braceDepth = 0;
+  let bracketDepth = 0;
+  let inString = false;
+  let escaped = false;
+  const raw = str.slice(start);
+  for (let i = 1; i < raw.length; i++) { // skip opening [
+    const ch = raw[i];
+    if (escaped) { escaped = false; continue; }
+    if (ch === "\\") { escaped = true; continue; }
+    if (ch === '"') { inString = !inString; continue; }
+    if (inString) continue;
+    if (ch === "{") { if (braceDepth === 0 && bracketDepth === 0) objStart = i; braceDepth++; }
+    else if (ch === "[") bracketDepth++;
+    else if (ch === "]") { if (bracketDepth > 0) bracketDepth--; }
+    else if (ch === "}") {
+      braceDepth--;
+      if (braceDepth === 0 && bracketDepth === 0 && objStart !== -1) {
+        const objStr = raw.slice(objStart, i + 1).replace(/,\s*([}\]])/g, "$1");
+        try { items.push(JSON.parse(objStr)); } catch { /* skip broken object */ }
+        objStart = -1;
+      }
+    }
+  }
+  return items.length > 0 ? items : null;
+}
+
 export async function GET(request: NextRequest) {
   const slug = request.nextUrl.searchParams.get("slug");
   if (!slug) {
@@ -95,7 +151,12 @@ chart 数据要求：
 
 ## 返回格式
 
-返回严格的 JSON 数组，不要包含 markdown 代码块标记：
+严格要求：
+- 只返回一个 JSON 数组，不要任何其他文字
+- 不要用 markdown 代码块包裹
+- 字符串中的双引号用 \\" 转义
+- answer 字段必须是数字索引（0-3），不是字母
+
 [
   {
     "type": "text",
@@ -112,9 +173,7 @@ chart 数据要求：
     "answer": 2,
     "explanation": "详细解析，说明如何从图中判断"
   }
-]
-
-answer 字段是正确选项的索引（0-3）。`;
+]`;
 
   try {
     const controller = new AbortController();
@@ -130,7 +189,7 @@ answer 字段是正确选项的索引（0-3）。`;
       signal: controller.signal,
       body: JSON.stringify({
         model,
-        max_tokens: 128000,
+        max_tokens: 64000,
         system: systemPrompt,
         messages: [
           {
@@ -154,31 +213,50 @@ answer 字段是正确选项的索引（0-3）。`;
 
     const data = await response.json();
     const text = data.content?.[0]?.text || "";
-
-    // Parse JSON from response
-    const jsonStr = text.replace(/^```json?\n?/, "").replace(/\n?```$/, "").trim();
-    const questions = JSON.parse(jsonStr);
-
-    if (!Array.isArray(questions) || questions.length === 0) {
-      return NextResponse.json({ error: "Invalid AI response format" }, { status: 502 });
+    if (data.stop_reason === "max_tokens") {
+      console.warn("AI response was truncated (hit max_tokens), attempting partial recovery...");
     }
 
-    // Validate each question
-    for (const q of questions) {
-      if (!q.question || !Array.isArray(q.options) || typeof q.answer !== "number" || !q.explanation) {
-        return NextResponse.json({ error: "Invalid question format from AI" }, { status: 502 });
+    const questions = extractJSON(text);
+
+    if (!Array.isArray(questions) || questions.length === 0) {
+      console.error("Failed to parse questions. Raw AI text (first 3000 chars):", text.slice(0, 3000));
+      return NextResponse.json({ error: "AI 返回格式异常，请重试" }, { status: 502 });
+    }
+
+    // Validate and fix each question
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const validated: any[] = [];
+    for (const raw of questions) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const q = raw as any;
+      if (!q.question || !Array.isArray(q.options) || !q.explanation) continue;
+      // Fix answer field: convert letter to index if needed
+      let answer = q.answer;
+      if (typeof answer === "string") {
+        const idx = "ABCD".indexOf(answer.toUpperCase());
+        answer = idx >= 0 ? idx : 0;
       }
+      if (typeof answer !== "number" || answer < 0 || answer > 3) answer = 0;
+      q.answer = answer;
+
       // Validate chart data if present
       if (q.type === "chart" && q.chart) {
         if (!Array.isArray(q.chart.data) || q.chart.data.length === 0) {
-          return NextResponse.json({ error: "Invalid chart data from AI" }, { status: 502 });
+          q.type = "text";
+          delete q.chart;
         }
       }
+      validated.push(q);
     }
 
-    return NextResponse.json({ questions });
+    if (validated.length === 0) {
+      return NextResponse.json({ error: "AI 生成的题目格式无效，请重试" }, { status: 502 });
+    }
+
+    return NextResponse.json({ questions: validated });
   } catch (err) {
     console.error("Quiz generation error:", err);
-    return NextResponse.json({ error: "Failed to generate quiz" }, { status: 500 });
+    return NextResponse.json({ error: "生成超时或网络错误，请重试" }, { status: 500 });
   }
 }
