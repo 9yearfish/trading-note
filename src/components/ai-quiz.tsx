@@ -21,23 +21,38 @@ interface QuizQuestion {
 }
 
 function fireConfetti() {
-  const duration = 2000;
+  const colors = [
+    "#ff0000", "#ff4500", "#ff6347", "#ff69b4", "#ff1493",
+    "#ffd700", "#ffa500", "#ffeb3b", "#f59e0b",
+    "#00ff00", "#22c55e", "#10b981", "#06d6a0",
+    "#00bfff", "#3b82f6", "#6366f1", "#818cf8",
+    "#8b5cf6", "#a855f7", "#d946ef", "#ec4899",
+    "#ffffff", "#00ffff", "#7fffd4",
+  ];
+  const duration = 3000;
   const end = Date.now() + duration;
 
   const frame = () => {
     confetti({
-      particleCount: 3,
+      particleCount: 5,
       angle: 60,
-      spread: 55,
+      spread: 70,
       origin: { x: 0, y: 0.7 },
-      colors: ["#22c55e", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6"],
+      colors,
+    });
+    confetti({
+      particleCount: 5,
+      angle: 120,
+      spread: 70,
+      origin: { x: 1, y: 0.7 },
+      colors,
     });
     confetti({
       particleCount: 3,
-      angle: 120,
-      spread: 55,
-      origin: { x: 1, y: 0.7 },
-      colors: ["#22c55e", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6"],
+      angle: 90,
+      spread: 120,
+      origin: { x: 0.5, y: 0.4 },
+      colors,
     });
 
     if (Date.now() < end) {
