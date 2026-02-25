@@ -123,7 +123,7 @@ async function callAI(
         signal: controller.signal,
         body: JSON.stringify({
           model,
-          max_tokens: 128000,
+
           system: systemPrompt,
           messages: [{ role: "user", content: userContent }],
         }),
@@ -174,18 +174,18 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Two parallel requests, 5 questions each → merge into 10
-    const [batch1, batch2] = await Promise.all([
-      callAI(baseUrl, apiKey, model, SYSTEM_PROMPT,
-        `出5道题（侧重前半部分内容）：\n\n${articleContent}`),
-      callAI(baseUrl, apiKey, model, SYSTEM_PROMPT,
-        `出5道题（侧重后半部分内容，不要与前面重复）：\n\n${articleContent}`),
-    ]);
+    // Batch 1: first 5 questions
+    const batch1Raw = await callAI(baseUrl, apiKey, model, SYSTEM_PROMPT,
+      `出5道题：\n\n${articleContent}`);
+    const batch1 = validateQuestions(batch1Raw || []);
 
-    const all = [
-      ...validateQuestions(batch1 || []),
-      ...validateQuestions(batch2 || []),
-    ];
+    // Batch 2: next 5, explicitly excluding batch 1 topics
+    const existingTopics = batch1.map((q: { question: string }) => q.question).join("；");
+    const batch2Raw = await callAI(baseUrl, apiKey, model, SYSTEM_PROMPT,
+      `再出5道题，必须与以下已有题目考察不同的知识点：\n${existingTopics}\n\n文章内容：\n${articleContent}`);
+    const batch2 = validateQuestions(batch2Raw || []);
+
+    const all = [...batch1, ...batch2];
 
     if (all.length === 0) {
       return NextResponse.json({ error: "AI 生成失败，请重试" }, { status: 502 });
