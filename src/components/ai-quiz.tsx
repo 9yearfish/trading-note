@@ -54,25 +54,38 @@ export function AIQuiz({ slug }: { slug: string }) {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const confettiFired = useRef(false);
 
-  const generate = useCallback(async () => {
+  const generate = useCallback(async (maxRetries = 2) => {
     setLoading(true);
     setError(null);
     setQuestions([]);
     setAnswers({});
     confettiFired.current = false;
-    try {
-      const res = await fetch(`/api/quiz?slug=${encodeURIComponent(slug)}`);
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || "生成失败");
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+      try {
+        const res = await fetch(`/api/quiz?slug=${encodeURIComponent(slug)}`);
+        const data = await res.json();
+        if (!res.ok) {
+          if (attempt < maxRetries) {
+            console.warn(`Quiz attempt ${attempt + 1} failed, retrying...`);
+            continue;
+          }
+          setError(data.error || "生成失败");
+          setLoading(false);
+          return;
+        }
+        setQuestions(data.questions);
+        setLoading(false);
         return;
+      } catch {
+        if (attempt < maxRetries) {
+          console.warn(`Quiz network error attempt ${attempt + 1}, retrying...`);
+          continue;
+        }
+        setError("网络错误，请稍后重试");
       }
-      setQuestions(data.questions);
-    } catch {
-      setError("网络错误，请稍后重试");
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   }, [slug]);
 
   useEffect(() => {
@@ -110,7 +123,7 @@ export function AIQuiz({ slug }: { slug: string }) {
         <h2 className="text-2xl font-bold">课后测验</h2>
         {questions.length > 0 && (
           <button
-            onClick={generate}
+            onClick={() => generate()}
             disabled={loading}
             className="px-3 py-1.5 text-sm rounded-md border text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-50 cursor-pointer disabled:cursor-wait"
           >
