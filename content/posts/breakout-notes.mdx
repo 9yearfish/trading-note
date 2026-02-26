@@ -1,0 +1,371 @@
+---
+title: "突破学习笔记"
+date: 2026-02-27
+tags: [突破, K线, 多空博弈, 趋势]
+excerpt: "突破的定义与三种结果、两根K线间的8种多空突破组合、影线的本质"
+---
+
+## 一、突破的定义
+
+突破（Breakout），也称极速运动。严格定义：**由穿透支撑或阻力的单根或多根趋势K线组成的趋势性运动**。
+
+两个必要条件：
+1. **穿透**某个支撑或阻力
+2. 由**趋势K线**组成（至少收线在突破对象之外）
+
+突破是多空双方的**核心意图**——多头要向上突破让空头止损，空头要向下突破让多头止损。一方胜出后，另一方被迫止损，进一步推动突破加速。这也是为什么成功的突破通常由强劲的趋势K线来完成。
+
+---
+
+## 二、突破的三种结果
+
+对任意一根K线，以它前一根K线的高点（或低点）为参照，突破尝试只有三种结果：**成功、停顿、失败**。
+
+### 2.1 突破成功
+
+后一根K线收出趋势K线，实体收在前一根K线极值之外。突破对象被有效穿透。
+
+#### 多头突破成功
+
+前一根为阳线，后一根继续收出趋势阳线，实体收在前根高点之上。多头控制了新一段时间的价格运动：
+
+<KLineChart
+  data={[
+    { time: "2026-03-01", open: 100, high: 106, low: 99, close: 105 },
+    { time: "2026-03-02", open: 105.5, high: 112, low: 105, close: 111 }
+  ]}
+  markers={[
+    { time: "2026-03-01", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "前一根阳线" },
+    { time: "2026-03-02", position: "aboveBar", color: "#22c55e", shape: "arrowDown", text: "多头突破成功 +" }
+  ]}
+  lines={[
+    { price: 106, color: "#f97316", title: "前根高点 106" }
+  ]}
+  height={250}
+/>
+
+#### 空头突破成功
+
+前一根为阴线，后一根继续收出趋势阴线，实体收在前根低点之下。空头成功击穿支撑：
+
+<KLineChart
+  data={[
+    { time: "2026-03-01", open: 106, high: 107, low: 100, close: 101 },
+    { time: "2026-03-02", open: 100.5, high: 101, low: 93, close: 94 }
+  ]}
+  markers={[
+    { time: "2026-03-01", position: "aboveBar", color: "#ef4444", shape: "arrowDown", text: "前一根阴线" },
+    { time: "2026-03-02", position: "belowBar", color: "#ef4444", shape: "arrowUp", text: "空头突破成功 +" }
+  ]}
+  lines={[
+    { price: 100, color: "#f97316", title: "前根低点 100" }
+  ]}
+  height={250}
+/>
+
+### 2.2 突破停顿
+
+后一根K线为内包K线——高低点都没有超出前一根K线的范围。双方均未积极发力，市场处于局部均衡。
+
+#### 多头停顿
+
+前一根为阳线，后一根虽也是阳线但完全被前根包住，多头没有创出新高的企图：
+
+<KLineChart
+  data={[
+    { time: "2026-03-01", open: 98, high: 108, low: 96, close: 107 },
+    { time: "2026-03-02", open: 101, high: 105, low: 100, close: 104 }
+  ]}
+  markers={[
+    { time: "2026-03-01", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "前一根大阳线" },
+    { time: "2026-03-02", position: "aboveBar", color: "#9ca3af", shape: "arrowDown", text: "停顿 △（内包）" }
+  ]}
+  height={250}
+/>
+
+#### 空头停顿
+
+前一根为阴线，后一根为小阴线但完全被前根包住，空头也没有创出新低：
+
+<KLineChart
+  data={[
+    { time: "2026-03-01", open: 108, high: 110, low: 97, close: 98 },
+    { time: "2026-03-02", open: 104, high: 106, low: 99, close: 100 }
+  ]}
+  markers={[
+    { time: "2026-03-01", position: "aboveBar", color: "#ef4444", shape: "arrowDown", text: "前一根大阴线" },
+    { time: "2026-03-02", position: "belowBar", color: "#9ca3af", shape: "arrowUp", text: "停顿 △（内包）" }
+  ]}
+  height={250}
+/>
+
+### 2.3 突破失败
+
+后一根K线曾尝试向某个方向突破，但到了收线之际却被拉回。影线穿越了前根极值，但实体没能留在突破对象之外。
+
+#### 多头突破失败
+
+上影线曾经越过前根高点（盘中一度突破成功），但最终收线折回，没能守住突破位。对多头而言，突破宣告失败：
+
+<KLineChart
+  data={[
+    { time: "2026-03-01", open: 100, high: 106, low: 99, close: 105 },
+    { time: "2026-03-02", open: 104, high: 109, low: 102, close: 103 }
+  ]}
+  markers={[
+    { time: "2026-03-01", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "前一根阳线" },
+    { time: "2026-03-02", position: "aboveBar", color: "#ef4444", shape: "arrowDown", text: "多头突破失败 −" }
+  ]}
+  lines={[
+    { price: 106, color: "#f97316", title: "前根高点 106" }
+  ]}
+  height={250}
+/>
+
+上影线越过了106，说明多头曾经努力突破。但收盘103远低于106，突破未能延续。
+
+#### 空头突破失败
+
+下影线曾经越过前根低点，但最终被多头拉回，收线在支撑之上：
+
+
+<KLineChart
+  data={[
+    { time: "2026-03-01", open: 106, high: 107, low: 100, close: 101 },
+    { time: "2026-03-02", open: 102, high: 104, low: 97, close: 103 }
+  ]}
+  markers={[
+    { time: "2026-03-01", position: "aboveBar", color: "#ef4444", shape: "arrowDown", text: "前一根阴线" },
+    { time: "2026-03-02", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "空头突破失败 −" }
+  ]}
+  lines={[
+    { price: 100, color: "#f97316", title: "前根低点 100" }
+  ]}
+  height={250}
+/>
+
+下影线跌破了100，说明空头曾尝试突破。但收盘103回到支撑上方，空头突破失败。
+
+---
+
+## 三、8种多空突破组合
+
+每根K线相对于前一根，多头和空头各自有三种状态：
+
+| 符号 | 状态 | 含义 |
+|------|------|------|
+| **+** | 突破成功 | 收出趋势K线，实体收在前根极值之外 |
+| **△** | 未发力 | 内包K线，没有试图突破 |
+| **−** | 突破失败 | 影线曾穿越但收线折回 |
+
+多头和空头不可能同时突破成功（一个向上一个向下同时收出趋势K线是矛盾的），所以3×3=9种组合中去掉1种，**共8种有效组合**：
+
+| # | 多头 | 空头 | 简称 |
+|---|------|------|------|
+| 1 | + | △ | 多头延续 |
+| 2 | + | − | 多头强势突破 |
+| 3 | − | △ | 多头受挫 |
+| 4 | − | − | 双方僵持 |
+| 5 | △ | △ | 完全停顿 |
+| 6 | △ | − | 空头受挫 |
+| 7 | − | + | 反转向下 |
+| 8 | △ | + | 空头接管 |
+
+### 组合1：多头+、空头△ — 多头延续
+
+多头突破成功，空头未发力。
+
+多头收出趋势阳线突破前根高点，空头几乎没有抵抗（无下影线）。这是最顺畅的多头延续：
+
+<KLineChart
+  data={[
+    { time: "2026-04-01", open: 100, high: 105, low: 99, close: 104 },
+    { time: "2026-04-02", open: 104.5, high: 110, low: 104, close: 109.5 }
+  ]}
+  markers={[
+    { time: "2026-04-01", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "前根" },
+    { time: "2026-04-02", position: "aboveBar", color: "#22c55e", shape: "arrowDown", text: "多头+ 空头△" }
+  ]}
+  lines={[
+    { price: 105, color: "#f97316", title: "前根高点" }
+  ]}
+  height={250}
+/>
+
+多头轻松越过高点105，空头完全没有发力。
+
+### 组合2：多头+、空头− — 多头强势突破
+
+多头突破成功，空头突破失败
+
+多头不但突破了前根高点，还在空头积极抵抗（下影线试探低点）的情况下依然收在高处。空头努力了但失败了：
+
+<KLineChart
+  data={[
+    { time: "2026-04-01", open: 100, high: 105, low: 99, close: 104 },
+    { time: "2026-04-02", open: 104, high: 110, low: 98, close: 109 }
+  ]}
+  markers={[
+    { time: "2026-04-01", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "前根" },
+    { time: "2026-04-02", position: "aboveBar", color: "#22c55e", shape: "arrowDown", text: "多头+ 空头−" }
+  ]}
+  lines={[
+    { price: 105, color: "#3b82f6", title: "前根高点" },
+    { price: 99, color: "#ef4444", title: "前根低点" }
+  ]}
+  height={250}
+/>
+
+下影线跌破了前根低点99（空头突破尝试），但最终收盘109远超前根高点（多头突破成功）。多空激烈交锋，多头胜出。
+
+### 组合3：多头−、空头△ — 多头受挫
+
+多头曾尝试突破（上影线越过前根高点），但失败折回。空头虽未向下突破，但稍占上风：
+
+<KLineChart
+  data={[
+    { time: "2026-04-01", open: 100, high: 106, low: 99, close: 105 },
+    { time: "2026-04-02", open: 104, high: 108, low: 101, close: 102 }
+  ]}
+  markers={[
+    { time: "2026-04-01", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "前根" },
+    { time: "2026-04-02", position: "aboveBar", color: "#ef4444", shape: "arrowDown", text: "多头− 空头△" }
+  ]}
+  lines={[
+    { price: 106, color: "#f97316", title: "前根高点" }
+  ]}
+  height={250}
+/>
+
+上影线越过了106（多头尝试突破），但收盘102折回高点下方。空头没有试图向下突破低点，但凭借多头失败自然占优。
+
+### 组合4：多头−、空头− — 双方僵持
+
+多头和空头都曾尝试突破对方（影线分别越过前根高低点），但都在收线时折回。谁也没能得手：
+
+<KLineChart
+  data={[
+    { time: "2026-04-01", open: 100, high: 106, low: 96, close: 103 },
+    { time: "2026-04-02", open: 102, high: 108, low: 94, close: 101 }
+  ]}
+  markers={[
+    { time: "2026-04-01", position: "belowBar", color: "#f97316", shape: "arrowUp", text: "前根" },
+    { time: "2026-04-02", position: "aboveBar", color: "#f97316", shape: "arrowDown", text: "多头− 空头−" }
+  ]}
+  lines={[
+    { price: 106, color: "#3b82f6", title: "前根高点" },
+    { price: 96, color: "#ef4444", title: "前根低点" }
+  ]}
+  height={250}
+/>
+
+上影线108越过高点106（多头突破失败），下影线94跌破低点96（空头也突破失败）。这就是外包K线——看似波动剧烈，实则双方都没能留住战果。
+
+### 组合5：多头△、空头△ — 完全停顿
+
+后一根K线完全被前一根包住，多空双方都没有尝试突破。市场处于局部均衡，动能停滞：
+
+<KLineChart
+  data={[
+    { time: "2026-04-01", open: 98, high: 108, low: 95, close: 106 },
+    { time: "2026-04-02", open: 102, high: 104, low: 100, close: 101 }
+  ]}
+  markers={[
+    { time: "2026-04-01", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "前根（大阳线）" },
+    { time: "2026-04-02", position: "aboveBar", color: "#9ca3af", shape: "arrowDown", text: "多头△ 空头△" }
+  ]}
+  height={250}
+/>
+
+后一根K线高低点都在前根范围内，这是典型的内包K线。双方都在观望，等待下一步的方向选择。
+
+### 组合6：多头△、空头− — 空头受挫
+
+多头没有尝试向上突破，空头曾尝试向下突破但失败。虽然双方都没成功，但空头的失败意味着多头仍有一定优势：
+
+<KLineChart
+  data={[
+    { time: "2026-04-01", open: 100, high: 106, low: 97, close: 105 },
+    { time: "2026-04-02", open: 103, high: 105, low: 95, close: 104 }
+  ]}
+  markers={[
+    { time: "2026-04-01", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "前根" },
+    { time: "2026-04-02", position: "aboveBar", color: "#3b82f6", shape: "arrowDown", text: "多头△ 空头−" }
+  ]}
+  lines={[
+    { price: 97, color: "#ef4444", title: "前根低点" }
+  ]}
+  height={250}
+/>
+
+多头没有尝试越过106。空头下影线跌破97（突破尝试），但收盘104回到高处，空头突破失败。
+
+### 组合7：多头−、空头+ — 反转向下
+
+多头曾尝试向上突破但失败，空头则成功收出趋势阴线突破前根低点。这是经典的反转形态：
+
+<KLineChart
+  data={[
+    { time: "2026-04-01", open: 100, high: 106, low: 99, close: 105 },
+    { time: "2026-04-02", open: 104, high: 108, low: 96, close: 97 }
+  ]}
+  markers={[
+    { time: "2026-04-01", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "前根阳线" },
+    { time: "2026-04-02", position: "aboveBar", color: "#ef4444", shape: "arrowDown", text: "多头− 空头+" }
+  ]}
+  lines={[
+    { price: 106, color: "#3b82f6", title: "前根高点" },
+    { price: 99, color: "#ef4444", title: "前根低点" }
+  ]}
+  height={250}
+/>
+
+上影线108越过高点106（多头突破失败），收盘97跌破低点99（空头突破成功）。这就是双K线反转——多头在上方的努力完全被空头反超，形成吞没。
+
+### 组合8：多头△、空头+ — 空头接管
+
+多头完全没有向上发力的迹象，空头直接收出趋势阴线突破前根低点。多头毫无抵抗：
+
+<KLineChart
+  data={[
+    { time: "2026-04-01", open: 100, high: 106, low: 99, close: 105 },
+    { time: "2026-04-02", open: 103, high: 104, low: 95, close: 96 }
+  ]}
+  markers={[
+    { time: "2026-04-01", position: "belowBar", color: "#22c55e", shape: "arrowUp", text: "前根阳线" },
+    { time: "2026-04-02", position: "aboveBar", color: "#ef4444", shape: "arrowDown", text: "多头△ 空头+" }
+  ]}
+  lines={[
+    { price: 99, color: "#ef4444", title: "前根低点" }
+  ]}
+  height={250}
+/>
+
+后一根阴线没有任何上影线（多头未发力），直接跌破低点99并收在95（空头突破成功）。这是最干脆的空头接管。
+
+---
+
+## 四、影线的本质
+
+通过上面的分析，你应该能看出一个重要的事实：
+
+> **影线 = 失败的突破尝试。**
+
+每一根影线，在收线之前，都曾经是强劲的实体。但由于最终突破失败、折返收回，才变成了影线。
+
+放眼任何一张K线图，几乎每根K线都有影线。这意味着**突破时时刻刻在发生**——多空双方在每一根K线的时间里都在拼命争夺。只是大部分突破尝试最终失败，化作了我们习以为常的影线。
+
+这也正是为什么阿尔布鲁克斯认为，交易者最重要的技能就是：**判断在前一根K线的上方或下方，多头还是空头将会胜出。**
+
+---
+
+## 五、突破失败 ≠ 反转
+
+最后补充一个容易混淆的点：
+
+突破失败并不意味着一定会反转。突破失败有两种可能的后续：
+
+1. **演变为反转**：如果逆势方后续也完成了突破成功，那前面的突破失败就是反转的起点
+2. **只是回调**：如果顺势方只是暂时休息，之后继续发力突破，那这次突破失败不过是趋势中正常的回调（持续形态）
+
+> 如果你认为后续应该悲观看待，突破失败可能进一步演变为反转。但如果你认为顺势方还有发挥空间，你可能更愿意称它为**回调**——相信趋势终将恢复。

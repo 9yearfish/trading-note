@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { MDXContent } from "@/components/mdx-content";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
-import { AIQuiz } from "@/components/ai-quiz";
+import { QuizProvider, QuizToggleButton } from "@/components/quiz-toggle";
 
 interface PostPageProps {
   params: Promise<{ slug: string }>;
@@ -52,27 +52,31 @@ export default async function PostPage({ params }: PostPageProps) {
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         返回
       </Link>
-      <header className="mb-10">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight">{post.title}</h1>
-        <div className="flex items-center gap-3 flex-wrap">
-          <span className="text-sm text-muted-foreground">
-            {new Date(post.date).toLocaleDateString("zh-CN")}
-          </span>
-          {post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {post.tags.map((tag) => (
-                <Badge key={tag} variant="secondary" className="text-xs">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          )}
+      <QuizProvider slug={slug}>
+        <header className="mb-10">
+          <div className="flex items-center justify-between gap-3 mb-3">
+            <h1 className="text-3xl sm:text-4xl font-bold leading-tight">{post.title}</h1>
+            <QuizToggleButton />
+          </div>
+          <div className="flex items-center gap-3 flex-wrap">
+            <span className="text-sm text-muted-foreground">
+              {new Date(post.date).toLocaleDateString("zh-CN")}
+            </span>
+            {post.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {post.tags.map((tag) => (
+                  <Badge key={tag} variant="secondary" className="text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+        </header>
+        <div className="prose prose-neutral dark:prose-invert max-w-none">
+          <MDXContent code={post.content} />
         </div>
-      </header>
-      <div className="prose prose-neutral dark:prose-invert max-w-none">
-        <MDXContent code={post.content} />
-      </div>
-      <AIQuiz slug={slug} />
+      </QuizProvider>
     </article>
   );
 }
