@@ -83,8 +83,8 @@ function validateQuestions(questions: unknown[]): any[] {
     }
     if (typeof answer !== "number" || answer < 0 || answer > 3) answer = 0;
     q.answer = answer;
-    if (q.type === "chart" && q.chart) {
-      if (!Array.isArray(q.chart.data) || q.chart.data.length === 0) {
+    if (q.type === "chart") {
+      if (!q.chart || !Array.isArray(q.chart.data) || q.chart.data.length === 0) {
         q.type = "text";
         delete q.chart;
       }
@@ -96,12 +96,11 @@ function validateQuestions(questions: unknown[]): any[] {
 
 const SYSTEM_PROMPT = `交易知识出题专家。根据文章生成5道选择题，混合text和chart类型。
 
-chart需构造OHLC数据：{"data":[{"time":"2026-03-01","open":100,"high":105,"low":98,"close":103}],"markers":[{"time":"2026-03-01","position":"belowBar","color":"#22c55e","shape":"arrowUp","text":"?"}],"lines":[{"price":100,"color":"#f97316","title":"中点"}]}
-chart用3-5根K线，日期连续。
+chart类型必须包含chart字段，构造OHLC数据，用3-5根K线，日期连续。markers的position只能是"aboveBar"或"belowBar"。
 
 要求：基于文章，4选项，覆盖不同知识点。explanation限1句话。
-只返回JSON数组，无其他文字，answer为0-3数字：
-[{"type":"text","question":"...","options":["A","B","C","D"],"answer":0,"explanation":"..."}]`;
+只返回JSON数组，无其他文字，answer为0-3数字。示例：
+[{"type":"text","question":"问题","options":["A","B","C","D"],"answer":0,"explanation":"解释"},{"type":"chart","question":"观察下图K线，该形态属于什么？","chart":{"data":[{"time":"2026-03-01","open":100,"high":105,"low":98,"close":103},{"time":"2026-03-02","open":103,"high":108,"low":102,"close":107},{"time":"2026-03-03","open":107,"high":110,"low":99,"close":100}],"markers":[{"time":"2026-03-02","position":"aboveBar","color":"#ef4444","shape":"arrowDown","text":"?"}]},"options":["A","B","C","D"],"answer":1,"explanation":"解释"}]`;
 
 async function callAI(
   baseUrl: string, apiKey: string, model: string,
