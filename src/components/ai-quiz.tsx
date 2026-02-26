@@ -22,7 +22,7 @@ interface QuizQuestion {
 
 function fireConfetti() {
   const colors = ["#f43f5e", "#f59e0b", "#22c55e", "#3b82f6", "#8b5cf6", "#ec4899"];
-  const duration = 3000;
+  const duration = 2000;
   const end = Date.now() + duration;
 
   const frame = () => {
