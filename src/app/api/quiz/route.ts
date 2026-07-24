@@ -112,19 +112,19 @@ async function callAI(
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 120000);
 
-      const response = await fetch(`${baseUrl}/v1/messages`, {
+      const response = await fetch(`${baseUrl}/chat/completions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": apiKey,
-          "anthropic-version": "2023-06-01",
+          Authorization: `Bearer ${apiKey}`,
         },
         signal: controller.signal,
         body: JSON.stringify({
           model,
-
-          system: systemPrompt,
-          messages: [{ role: "user", content: userContent }],
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: userContent },
+          ],
         }),
       });
 
@@ -136,7 +136,7 @@ async function callAI(
       }
 
       const data = await response.json();
-      const text = data.content?.[0]?.text || "";
+      const text = data.choices?.[0]?.message?.content || "";
       if (!text) continue;
 
       const questions = extractJSON(text);
@@ -156,11 +156,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Missing slug parameter" }, { status: 400 });
   }
 
-  const baseUrl = process.env.CLAUDE_API_BASE_URL;
-  const apiKey = process.env.CLAUDE_API_KEY;
-  const model = process.env.CLAUDE_MODEL || "claude-haiku-4-5-20251001";
+  const baseUrl = process.env.DEEPSEEK_API_BASE_URL || "https://api.deepseek.com";
+  const apiKey = process.env.DEEPSEEK_API_KEY;
+  const model = process.env.DEEPSEEK_MODEL || "deepseek-chat";
 
-  if (!baseUrl || !apiKey) {
+  if (!apiKey) {
     return NextResponse.json(
       { error: "AI API not configured" },
       { status: 500 }
